@@ -14,7 +14,7 @@
 - Channels are on "layer" in an image which contains one single feature from the whole image e.g. in an RGB image, the "Red Channel" contains all the red pixels from the images, the "Blue Channel" contains all the blue pixels fro the image and the "Green Channel" contains all the green pizels from the image
 - When each channel is laid on top of each other, we get the whole image
 - The example given here talks about "Red Pixel" as a feature contained in one channel, but the feature need not be colour, it could be something else too e.g. we can think of th below image as being made up of two channels: 1 channel of two vertical lines and another channel of two horizontal lines
-![](https://res.cloudinary.com/ss-da/image/upload/v1594838637/square_m83r4c.png)
+![](https://res.cloudinary.com/ss-da/image/upload/v1595003599/For_Assignment_lmxatf.png)
 
 
 
