@@ -1,0 +1,20 @@
+class Net(nn.Module):
+
+    def __init__(self):
+        super(Net, self).__init__()
+        self.conv1 = nn.Conv2d(1, 8, 3)         # 26; RF: 3
+        self.conv2 = nn.Conv2d(8, 8, 3)        # 24;  RF: 5
+        self.pool1 = nn.MaxPool2d(2, 2)         # 12; RF: 10
+        self.antman = nn.Conv2d(8, 8, 1)
+        self.conv3 = nn.Conv2d(8, 16, 3)       # 10;  RF: 12
+        self.conv4 = nn.Conv2d(16, 16, 3)       # 8;  RF: 14
+        self.conv5 = nn.Conv2d(16, 16, 3)       # 6;  RF: 16
+        self.conv6 = nn.Conv2d(16, 10, 6)       # 1;  RF: 28
+
+    def forward(self, x):
+        x = self.pool1(F.relu(self.conv2(F.relu(self.conv1(x)))))
+        x = self.antman(x)
+        x = F.relu(self.conv4(F.relu(self.conv3(x))))
+        x = self.conv6(F.relu(self.conv5(x)))
+        x = x.view(-1, 10)
+        return F.log_softmax(x, dim=1)
