@@ -8,7 +8,7 @@
 
 ---
 
-# ITERATION 1 - NOTEBOOK HERE
+# ITERATION 1 - NOTEBOOK [HERE](https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment3_MNIST/models_tried/0_base_from_prev_assignment.ipynb)
 
 ## Target
 - Since I had already done some iterations in the previous [assignment](https://github.com/sairamsubramaniam/tsai_projects/tree/master/assignment2_MNIST), the easiest way to start was to take the previous model, reduce parameters to below 10k and see how the model performed.
@@ -26,15 +26,15 @@
   - A few images with missing pixels is not being predicted properly
   - A few 5 had slight rotation / shear an was predicted as 3
 - Currently, I do not know how to address the first three, but the lst one can be accounted for by adding random rotation to the images  
-- That would be the next notebook here.
+- That would be the next notebook [here](https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment3_MNIST/models_tried/1_data_augmentation_added.ipynb).
 
 
 ---
 
-# ITERATION 2 - NOTEBOOK HERE
+# ITERATION 2 - NOTEBOOK [HERE](https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment3_MNIST/models_tried/1_data_augmentation_added.ipynb)
 
 ## Target
-- The previous notebook gave an accuracy of 99.21% to 99.27%
+- The [previous notebook](https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment3_MNIST/models_tried/0_base_from_prev_assignment.ipynb) gave an accuracy of 99.21% to 99.27%
 - The plan this time is to add Random Rotation while keeping everythig else same
 
 ## Results
@@ -44,16 +44,16 @@
   
 ## Analysis
 - The augmentation technique has definitely helped as we see the training accuracy has gone up to 99.35%, while the training accuracy has "regularized" to 99.18% (from 99.37% before)  
-- Since we do have some leeway in increasing paramters, that would be my next try. The next notebook is here.
+- Since we do have some leeway in increasing paramters, that would be my next try. The next notebook is [here](https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment3_MNIST/models_tried/2_increased_parameters.ipynb).
 
 
 
 ---
 
-# ITERATION 3 - NOTEBOOK HERE
+# ITERATION 3 - NOTEBOOK [HERE](https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment3_MNIST/models_tried/2_increased_parameters.ipynb)
 
 ## Target
-- The previous notebook gave an accuracy of 99.30% to 99.39%
+- The [previous notebook](https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment3_MNIST/models_tried/1_data_augmentation_added.ipynb) gave an accuracy of 99.30% to 99.39%
 - The plan this time is to add a few more parameters and see if the model learns better
 - Increased params by increasing kernels in the second last layer from 8 to 16
 
@@ -64,16 +64,16 @@
   
 ## Analysis
 - Since the model is reaching 99.5% in its 18th epoch, it certainly has capacity to learn. We will just need to find a way to make it learn faster (within 15 epochs  
-- This could be probably be achieved by tweaking the learning rate schedule, which will ne the strategy in the next notebook.  
+- This could be probably be achieved by tweaking the learning rate schedule, which will ne the strategy in the next [notebook](https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment3_MNIST/models_tried/3_differing_lr_schedule.ipynb).  
 
 
 
 ---
 
-# ITERATION 4 - NOTEBOOK HERE
+# ITERATION 4 - NOTEBOOK [HERE](https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment3_MNIST/models_tried/3_differing_lr_schedule.ipynb)
 
 ## Target
-- The previous notebook gave an accuracy of 99.36%, but it also went up to 99.5% in the 18th epoch
+- The [previous notebook](https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment3_MNIST/models_tried/2_increased_parameters.ipynb) gave an accuracy of 99.36%, but it also went up to 99.5% in the 18th epoch
 - The plan this time is to use an lr rate scheduler and see if it speeds up training to give 99.4% in 10 epochs
 - Since, we are slightly crossing the 8k param limit, we will also remove bias and 1 kernel to get it below 8k params
 
