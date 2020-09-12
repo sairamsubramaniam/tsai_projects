@@ -74,11 +74,11 @@ class S7(nn.Module):
                               padding=2, padding_mode="replicate")
         self.t2 = transition_block(c_in=128, c_out=256)
         
-        self.c3 = conv_block(c_in=256, out_channel_list=[512], padding_list=[1])
-        #self.t3 = transition_block(c_in=512, c_out=256)
+        self.c3 = conv_block(c_in=256, out_channel_list=[256], padding_list=[1])
+        self.t3 = transition_block(c_in=256, c_out=128)
 
-        self.last = nn.Conv2d(in_channels=512, out_channels=10, kernel_size=3, padding=1)
-        self.gap = nn.AvgPool2d(kernel_size=8)
+        self.last = nn.Conv2d(in_channels=128, out_channels=10, kernel_size=3, padding=1)
+        self.gap = nn.AvgPool2d(kernel_size=4)
         
 
 
@@ -91,7 +91,8 @@ class S7(nn.Module):
         dws_dil1 = out_dil1 + out_dil1  # 16
         out_t2 = self.t2(dws_dil1)      # 8
         out_c3 = self.c3(out_t2)        # 8
-        out_last = self.last(out_c3)    # 8
+        out_t3 = self.t3(out_c3)        # 4
+        out_last = self.last(out_t3)    # 4
         out_gap = self.gap(out_last)
         data_out = out_gap.view(-1, 10)
         return F.log_softmax(data_out, dim=1)
