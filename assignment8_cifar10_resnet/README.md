@@ -1,35 +1,23 @@
-# TRAINING CIFAR10 USING DILATED & DEPTHWISE SEPARABLE CONVOLUTIONS
-  
-### In more detail, the conditions to be achieved for this assignment are:
-  
-- change the code such that it uses GPU
-- change the architecture to C1C2C3C40 (basically 3 MPs)
-- total RF must be more than 44
-- one of the layers must use Depthwise Separable Convolution
-- one of the layers must use Dilated Convolution
-- use GAP (compulsory):- add FC after GAP to target #of classes (optional)
-- achieve 80% accuracy, as many epochs as you want. Total Params to be less than 1M. 
-- upload to Github
-- Attempt S7-Assignment Solution
-  
-  
-### The network satisfying the above conditions are in raw_models.S7 module  
-- 80% was achieved by the 8th Epoch. 
-- The model has 777,546 trainable params. 
-- Receptive Fields calculations are given below:
 
-Resolution-In | Kernel | Stride | Padding | Resolution-Out | Jump-In | Jump-Out | Receptive Field | 
---- | --- | --- | --- | --- | --- | --- | --- | 
-32 | 3 | 1 | 1 | 32 | 1 | 1 | 3 | 
-32 | 3 | 1 | 1 | 32 | 1 | 1 | 5 | 
-32 | 2 | 2 | 0 | 16 | 1 | 2 | 7 | 
-16 | 1 | 1 | 0 | 16 | 2 | 2 | 7 | 
-16 | 3 | 1 | 1 | 16 | 2 | 2 | 11 | 
-16 | 5 | 1 | 2 | 16 | 2 | 2 | 19 | 
-16 | 2 | 2 | 0 | 8 | 2 | 4 | 23 | 
-8 | 1 | 1 | 0 | 8 | 4 | 4 | 23 | 
-8 | 3 | 1 | 1 | 8 | 4 | 4 | 31 | 
-8 | 3 | 1 | 1 | 8 | 4 | 4 | 39 | 
-8 | 8 | 1 | 0 | 1 | 4 | 4 | 67 | 
+# Modelling CIFAR10 Dataset Using Resnet18
 
+### The requirements in detail:
+  
+1. Go through this repository: https://github.com/kuangliu pytorch-cifar
+2. Extract the ResNet18 model from this repository and add it to your API/repo. 
+3. Use your data loader, model loading, train, and test code to train ResNet18 on Cifar10
+4. Your Target is 85% accuracy. No limit on the number of epochs. 5. Use default ResNet18 code (so params are fixed). 
+6. Once done finish S8-Assignment-Solution. 
+
+
+### The solution:
+- Using resnet18, the model could achieve 82% easily within 15 epochs
+- The model started struggling after that with drop in accuracy and hovering mostly about 83% 
+- After 23rd epoch, learning rate was reduced and weight decay of 1e-5 was added. 
+- The model quickly jumped to 85.5% with this change in the next epoch itself, but then stayed there for the next 18 epochs
+
+### Issues:
+- The model started overfitting from 6th epochs onwards and by the 42nd, it was heavily overfitting with training accuracy reaching >98%
+- The model was trained totally for 42 epochs, but most of the epochs didnt help improve the accuracy that much
+- We didnt use learning rates optimally to make the training mroe efficient
 
