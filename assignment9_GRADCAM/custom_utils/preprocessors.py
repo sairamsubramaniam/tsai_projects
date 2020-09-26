@@ -31,3 +31,12 @@ def best_cifar10_train_transforms(dataloader):
         alb.Normalize(*stats)
         ], p=1.0)
 
+
+
+def best_cifar10_test_transforms(dataloader):
+    stats = calculate_mean_std(dataloader)
+    return alb.Compose([
+        alb_torch.transforms.ToTensor(),
+        alb.Normalize(*stats)
+        ], p=1.0)
+
