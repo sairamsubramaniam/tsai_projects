@@ -129,8 +129,8 @@ def train_epochs(model, device, train_loader, test_loader, optimizer, loss_func,
                 record_max_acc(max_acc=max_acc, accuracy_store_path=accuracy_store_path)
         print("-----------------------------------------------")
     print("TOTAL TRAINING TIME: ", time.time() - start)
-    print("LAST 10 EPOCH AVG ACC: ", sum(test_acc[-10:]) / max(1, len(test_acc[-10:])) )
-    print("LAST 5 EPOCH AVG ACC: ", sum(test_acc[-5:]) / max(1, len(test_acc[-5:])) )
+    print("LAST 10 EPOCH AVG ACC: ", sum(test_acc[-10:]) / len(test_acc[-10:]) )
+    print("LAST 5 EPOCH AVG ACC: ", sum(test_acc[-5:]) / len(test_acc[-5:]) )
     print("MAX ACCURACY: ", max(test_acc))
 
     return {
