@@ -10,15 +10,15 @@ def calculate_mean_std(dataloader):
     """
     mean = 0.0
     std = 0.0
-    for imgs, _ in datatloader:
+    for imgs, _ in dataloader:
         batch_size = imgs.size(0)
         imgs = imgs.view(batch_size, imgs.size(1), -1)
-        mean += imgs.mean(dim=2)
-        std += imgs.std(dim=2)
+        mean += imgs.mean(dim=2).sum(dim=0)
+        std += imgs.std(dim=2).sum(dim=0)
     mean /= len(dataloader.dataset)
     std /= len(dataloader.dataset)
 
-    return [mean, std]
+    return [tuple(mean.numpy()), tuple(std.numpy())]
 
 
 
@@ -26,8 +26,8 @@ def best_cifar10_train_transforms(dataloader):
     stats = calculate_mean_std(dataloader)
     return alb.Compose([
         alb.Rotate(limit=10), 
-        alb.HorizontalFlip()
+        alb.HorizontalFlip(),
         alb_torch.transforms.ToTensor(),
-        alb.Normalize(stats)
+        alb.Normalize(*stats)
         ], p=1.0)
 
