@@ -22,8 +22,7 @@ def calculate_mean_std(dataloader):
 
 
 
-def best_cifar10_train_transforms(dataloader):
-    stats = calculate_mean_std(dataloader)
+def best_cifar10_train_transforms(stats):
     return alb.Compose([
         alb.Rotate(limit=10), 
         alb.HorizontalFlip(),
@@ -33,8 +32,7 @@ def best_cifar10_train_transforms(dataloader):
 
 
 
-def best_cifar10_test_transforms(dataloader):
-    stats = calculate_mean_std(dataloader)
+def best_cifar10_test_transforms(stats):
     return alb.Compose([
         alb_torch.transforms.ToTensor(),
         alb.Normalize(*stats)
