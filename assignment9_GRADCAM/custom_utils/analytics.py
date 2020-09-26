@@ -12,21 +12,21 @@ import matplotlib.pyplot as plt
 
 
 
-def gradcam(model, device, image_batch):
-    """
-    http://gradcam.cloudcv.org/
-    https://arxiv.org/abs/1610.02391
-    Took this code from here
-    """
-    if (device.type == "cuda") and (not next(model.parameters()).is_cuda):
-        model = model.to(device)
-
-    output = model(image_batch)
-    vals, idxs = torch.max(output, dim=1, keepdim=True)
-    zeros_temp = torch.zeros_like(output)
-    g_output = zeros_temp.scatter_(dim=1, index=idxs, src=vals)
-
-    print(g_output)
+#def gradcam(model, device, image_batch):
+#    """
+#    http://gradcam.cloudcv.org/
+#    https://arxiv.org/abs/1610.02391
+#    Took this code from here
+#    """
+#    if (device.type == "cuda") and (not next(model.parameters()).is_cuda):
+#        model = model.to(device)
+#
+#    output = model(image_batch)
+#    vals, idxs = torch.max(output, dim=1, keepdim=True)
+#    zeros_temp = torch.zeros_like(output)
+#    g_output = zeros_temp.scatter_(dim=1, index=idxs, src=vals)
+#
+#    print(g_output)
 
     
 
@@ -86,7 +86,7 @@ def plot_misclassified(imgs, targets, preds, nrows, ncols, skip=0,
         idx += 1
     
     return fig, axes
-o
+
 
 
 
