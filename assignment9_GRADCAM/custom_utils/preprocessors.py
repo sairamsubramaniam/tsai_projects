@@ -44,12 +44,12 @@ def best_cifar10_test_transforms(stats):
 torch.manual_seed(1)
 batch_size = 128
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
-                                        download=True, transform=alb_torch.transforms.ToTensor())
+                                        download=True, transform=torchvision.transforms.ToTensor())
 train_loader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
                                           shuffle=True, num_workers=2)
 
 testset = torchvision.datasets.CIFAR10(root='./data', train=False,
-                                       download=True, transform=alb_torch.transforms.ToTensor())
+                                       download=True, transform=torchvision.transforms.ToTensor())
 test_loader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
                                          shuffle=False, num_workers=2)
 
