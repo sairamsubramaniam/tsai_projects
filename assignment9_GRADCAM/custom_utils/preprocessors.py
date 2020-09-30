@@ -101,8 +101,8 @@ def get_cifar10_loaders(root, device,
 
 
     # Download datasets with transforms
-    train_ds = AlbCifar10(root=root, download=False, train=True transform=train_transforms)
-    test_ds = AlbCifar10(root=root, download=True, train=False transform=test_transforms)
+    train_ds = AlbCifar10(root=root, download=False, train=True, transform=train_transforms)
+    test_ds = AlbCifar10(root=root, download=True, train=False, transform=test_transforms)
 
     # Create Dataloaders
     train_dl = torch.utils.data.DataLoader(train_ds, batch_size=train_batch_size, 
