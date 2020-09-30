@@ -1,17 +1,26 @@
 
 import albumentations as alb
 import albumentations.pytorch as alb_torch
+import numpy as np
 import torch
+from torch.utils.data import Dataset
 import torchvision
+from PIL import Image
 
 
-def calculate_mean_std(dataloader):
+def calculate_mean_std(dataloader, device):
     """
     Source: https://discuss.pytorch.org/t/computing-the-mean-and-std-of-dataset/34949/2
     """
+    cuda_yes = False
+    if device.type == "cuda":
+        cuda_yes = True
+
     mean = 0.0
     std = 0.0
     for imgs, _ in dataloader:
+        if cuda_yes:
+            imgs = imgs.to(device)
         batch_size = imgs.size(0)
         imgs = imgs.view(batch_size, imgs.size(1), -1)
         mean += imgs.mean(dim=2).sum(dim=0)
@@ -27,7 +36,7 @@ def best_cifar10_train_transforms(stats):
     return alb.Compose([
         alb.Rotate(limit=10), 
         alb.HorizontalFlip(),
-        torchvision.transforms.ToTensor(),
+        alb_torch.transforms.ToTensor(),
         alb.Normalize(*stats)
         ], p=1.0)
 
@@ -35,37 +44,73 @@ def best_cifar10_train_transforms(stats):
 
 def best_cifar10_test_transforms(stats):
     return alb.Compose([
-        torchvision.transforms.ToTensor(),
+        alb_troch.transforms.ToTensor(),
         alb.Normalize(*stats)
         ], p=1.0)
 
 
-# TEMPORARY CODE FOR GETTING DATASET
-torch.manual_seed(1)
-batch_size = 128
-trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
-                                        download=True, transform=torchvision.transforms.ToTensor())
-train_loader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
-                                          shuffle=True, num_workers=2)
-
-testset = torchvision.datasets.CIFAR10(root='./data', train=False,
-                                       download=True, transform=torchvision.transforms.ToTensor())
-test_loader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
-                                         shuffle=False, num_workers=2)
-
-stats = calculate_mean_std(dataloader=train_loader)
-train_transforms = best_cifar10_train_transforms(stats=stats)
-test_transforms = best_cifar10_test_transforms(stats=stats)
 
 
-trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
-                                        download=True, transform=train_transforms)
-train_loader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
-                                          shuffle=True, num_workers=2)
+class AlbCifar10(torchvision.datasets.CIFAR10):
 
-testset = torchvision.datasets.CIFAR10(root='./data', train=False,
-                                       download=True, transform=test_transforms)
-test_loader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
-                                         shuffle=False, num_workers=2)
+    def __init__(self, root, train=True, transform=None, target_transform=None, download=False):
+        super(AlbCifar10, self).__init__(root=root, train=train, transform=transform, 
+                                         target_transform=target_transform, download=download)
+
+    def __len__(self):
+        return super(AlbCifar10, self).__len__()
+
+    def __getitem__(self, idx):
+        img, target = super(AlbCifar10, self).__getitem__(idx)
+        if self.transform:
+            img_np = np.array(img)
+            augmented = self.transform(image=img_np)
+            img = Image.fromarray(augmented["image"])
+        return img, target
+
+
+
+
+
+def get_cifar10_loaders(root, device, 
+                    train_transforms="default", test_transforms="default", 
+                    train_batch_size=128, test_batch_size=256,
+                    calc_stats_for="train", set_seed=1):
+    """
+    1) Downloads cifar10 dataset if not already downloaded
+    2) Calculates Mean, Std of dataset (either train dataset or full dataset)
+    3) Adds the given transform strategy using Albumentations only
+    4) Default transform strategies are `best_cifar10_train_transforms` &
+       `best_cifar10_test_transforms`
+    5) Returns train and test dataloaders
+    """
+    if set_seed:
+        torch.manual_seed(1)
+
+    # Calculate Statistics for normalization
+    if train_transforms == "default":
+        train_ds = torchvision.datasets.CIFAR10(root=root, download=True, train=True 
+                                                transform=torchvision.transforms.ToTensor())
+        train_dl = torch.utils.data.DataLoader(train_ds, batch_size=256, shuffle=False,  num_workers=2)
+
+        stats = calculate_mean_std(dataloader=train_dl, device=device)
+
+        train_transforms = best_cifar10_train_transforms(stats)
+
+        test_transforms = best_cifar10_test_transforms(stats)
+
+
+    # Download datasets with transforms
+    train_ds = AlbCifar10(root=root, download=False, train=True transform=train_transforms)
+    test_ds = AlbCifar10(root=root, download=True, train=False transform=test_transforms)
+
+    # Create Dataloaders
+    train_dl = torch.utils.data.DataLoader(train_ds, batch_size=train_batch_size, 
+                                           shuffle=True, num_workers=2)
+    test_dl = torch.utils.data.DataLoader(test_ds, batch_size=test_batch_size, 
+                                           shuffle=False, num_workers=2)
+
+    return train_dl, test_dl
+
 
 
