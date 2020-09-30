@@ -110,7 +110,8 @@ def get_cifar10_loaders(root, device,
     test_dl = torch.utils.data.DataLoader(test_ds, batch_size=test_batch_size, 
                                            shuffle=False, num_workers=2)
 
-    return train_dl, test_dl
+    classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+    return train_dl, test_dl, classes
 
 
 
