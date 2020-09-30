@@ -89,7 +89,7 @@ def get_cifar10_loaders(root, device,
 
     # Calculate Statistics for normalization
     if train_transforms == "default":
-        train_ds = torchvision.datasets.CIFAR10(root=root, download=True, train=True 
+        train_ds = torchvision.datasets.CIFAR10(root=root, download=True, train=True,
                                                 transform=torchvision.transforms.ToTensor())
         train_dl = torch.utils.data.DataLoader(train_ds, batch_size=256, shuffle=False,  num_workers=2)
 
