@@ -53,24 +53,27 @@ def best_cifar10_test_transforms(stats):
 
 
 
-class AlbCifar10(torchvision.datasets.CIFAR10):
+class AlbCifar10(Dataset):
 
     def __init__(self, root, train=True, transform=None, target_transform=None, download=False):
-        super(AlbCifar10, self).__init__(root=root, train=train, transform=transform, 
+        
+        self.ds = torchvision.datasets.CIFAR10(root=root, train=train, transform=None, 
                                          target_transform=target_transform, download=download)
+        self.transform = transform
 
     def __len__(self):
-        return super(AlbCifar10, self).__len__()
+        return len(self.ds)
 
     def __getitem__(self, idx):
-        img, target = super(AlbCifar10, self).__getitem__(idx)
+        img, target = self.ds[idx]
         if self.transform:
             img_np = np.array(img)
             augmented = self.transform(image=img_np)
-            img = Image.fromarray(augmented["image"])
+            img = augmented["image"]
+            h, w, c = img.shape
+            img = img.reshape(c, h, w)
+            #img = Image.fromarray(augmented["image"])
         return img, target
-
-
 
 
 
