@@ -1,4 +1,6 @@
 
+from datetime import datetime
+
 import albumentations as alb
 import albumentations.pytorch as alb_torch
 import numpy as np
@@ -89,26 +91,32 @@ def get_cifar10_loaders(root, device,
 
     # Calculate Statistics for normalization
     if train_transforms == "default":
+        print("Line1: ", str(datetime.now()))
         train_ds = torchvision.datasets.CIFAR10(root=root, download=True, train=True,
-                                                transform=torchvision.transforms.ToTensor())
+        print("Line2: ", str(datetime.now()))                                        transform=torchvision.transforms.ToTensor())
         train_dl = torch.utils.data.DataLoader(train_ds, batch_size=256, shuffle=False,  num_workers=2)
-
+        print("Line3: ", str(datetime.now()))
         stats = calculate_mean_std(dataloader=train_dl, device=device)
-
+        print("Line4: ", str(datetime.now()))
         train_transforms = best_cifar10_train_transforms(stats)
-
+        print("Line5: ", str(datetime.now()))
         test_transforms = best_cifar10_test_transforms(stats)
 
 
     # Download datasets with transforms
+    print("Line6: ", str(datetime.now()))
     train_ds = AlbCifar10(root=root, download=False, train=True, transform=train_transforms)
+    print("Line7: ", str(datetime.now()))
     test_ds = AlbCifar10(root=root, download=True, train=False, transform=test_transforms)
 
     # Create Dataloaders
+    print("Line8: ", str(datetime.now()))
     train_dl = torch.utils.data.DataLoader(train_ds, batch_size=train_batch_size, 
                                            shuffle=True, num_workers=2)
+    print("Line9: ", str(datetime.now()))
     test_dl = torch.utils.data.DataLoader(test_ds, batch_size=test_batch_size, 
                                            shuffle=False, num_workers=2)
+    print("Line10: ", str(datetime.now()))
 
     classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
     return train_dl, test_dl, classes
