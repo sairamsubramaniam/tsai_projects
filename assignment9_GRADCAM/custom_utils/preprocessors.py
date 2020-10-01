@@ -93,7 +93,8 @@ def get_cifar10_loaders(root, device,
     if train_transforms == "default":
         print("Line1: ", str(datetime.now()))
         train_ds = torchvision.datasets.CIFAR10(root=root, download=True, train=True,
-        print("Line2: ", str(datetime.now()))                                        transform=torchvision.transforms.ToTensor())
+                                                transform=torchvision.transforms.ToTensor())
+        print("Line2: ", str(datetime.now()))
         train_dl = torch.utils.data.DataLoader(train_ds, batch_size=256, shuffle=False,  num_workers=2)
         print("Line3: ", str(datetime.now()))
         stats = calculate_mean_std(dataloader=train_dl, device=device)
