@@ -30,7 +30,7 @@ def calculate_mean_std(dataloader, device):
     mean /= len(dataloader.dataset)
     std /= len(dataloader.dataset)
 
-    return [tuple(mean.cpu().numpy()), tuple(std.cpu().numpy())]
+    return [tuple(mean.tolist()), tuple(std.tolist())]
 
 
 
