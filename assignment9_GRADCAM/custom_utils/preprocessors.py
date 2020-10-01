@@ -46,7 +46,7 @@ def best_cifar10_train_transforms(stats):
 
 def best_cifar10_test_transforms(stats):
     return alb.Compose([
-        alb_troch.transforms.ToTensor(),
+        alb_torch.transforms.ToTensor(),
         alb.Normalize(*stats)
         ], p=1.0)
 
