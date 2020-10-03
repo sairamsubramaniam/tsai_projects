@@ -94,7 +94,7 @@ class AlbCifar10(Dataset):
             #h, w, c = img.shape
             #img = img.reshape(c, h, w)
             #img = Image.fromarray(augmented["image"])
-        return img, target
+        return img, label
 
 
 
