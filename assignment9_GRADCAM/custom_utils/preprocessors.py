@@ -8,6 +8,7 @@ import torch
 from torch.utils.data import Dataset
 import torchvision
 from PIL import Image
+import cv2
 
 
 def calculate_mean_std(dataloader, device):
