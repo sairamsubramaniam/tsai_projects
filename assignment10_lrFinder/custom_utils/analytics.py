@@ -16,6 +16,7 @@ import cv2
 import numpy as np
 import torch
 from torch.autograd import Function
+import torch.nn.functional as F
 from torchvision import models
 
 class FeatureExtractor():
