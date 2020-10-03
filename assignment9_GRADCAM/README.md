@@ -1,23 +1,18 @@
 
-# Modelling CIFAR10 Dataset Using Resnet18
+# Modelling CIFAR10 - Achieve 87% Accuracy and use Albumentations for Image Augmentation
 
 ### The requirements in detail:
   
-1. Go through this repository: https://github.com/kuangliu pytorch-cifar
-2. Extract the ResNet18 model from this repository and add it to your API/repo. 
-3. Use your data loader, model loading, train, and test code to train ResNet18 on Cifar10
-4. Your Target is 85% accuracy. No limit on the number of epochs. 5. Use default ResNet18 code (so params are fixed). 
-6. Once done finish S8-Assignment-Solution. 
-
+1. Move your last code's transformations to Albumentations. Apply ToTensor, HorizontalFlip, Normalize (at min) + More (for additional points)
+2. Please make sure that your test_transforms are simple and only using ToTensor and Normalize
+3. Implement GradCam function as a module. 
+4. Your final code (notebook file) must use imported functions to implement transformations and GradCam functionality
+5. Target Accuracy is 87%   
 
 ### The solution:
-- Using resnet18, the model could achieve 82% easily within 15 epochs
-- The model started struggling after that with drop in accuracy and hovering mostly about 83% 
-- After 23rd epoch, learning rate was reduced and weight decay of 1e-5 was added. 
-- The model quickly jumped to 85.5% with this change in the next epoch itself, but then stayed there for the next 18 epochs
-
-### Issues:
-- The model started overfitting from 6th epochs onwards and by the 42nd, it was heavily overfitting with training accuracy reaching >98%
-- The model was trained totally for 42 epochs, but most of the epochs didnt help improve the accuracy that much
-- We didnt use learning rates optimally to make the training mroe efficient
+- Using resnet18, the model could achieve 85% easily within 20 epochs
+- The model started struggling after that with very high overfitting (train 99.8%)
+- After adding augmentations like Rotate and HorizontalFlip, overfitting reduces and gives leeway to continue training
+- However with the current strategy, the model could only reach upto 86.99%
+- LR scheduling: 0.1 for the first 20 epochs, 0.01 for the next 20 and 0.001 for the last 20
 
