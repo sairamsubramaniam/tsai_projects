@@ -34,10 +34,10 @@ def calculate_mean_std(dataloader, device):
 
 
 
-[transforms.RandomRotation(10) ,
-transforms.RandomHorizontalFlip(0.25) ,
-transforms.ToTensor(),
-transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+#[transforms.RandomRotation(10) ,
+#transforms.RandomHorizontalFlip(0.25) ,
+#transforms.ToTensor(),
+#transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
 
 
@@ -105,6 +105,7 @@ def get_cifar10_loaders(root, device,
                                                 transform=torchvision.transforms.ToTensor())
         train_dl = torch.utils.data.DataLoader(train_ds, batch_size=256, shuffle=False,  num_workers=2)
         stats = calculate_mean_std(dataloader=train_dl, device=device)
+        print(stats)
         train_transforms = best_cifar10_train_transforms(stats)
         test_transforms = best_cifar10_test_transforms(stats)
 
