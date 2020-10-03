@@ -54,7 +54,7 @@ def best_cifar10_train_transforms(stats):
         alb.Rotate(limit=10, p=0.2), 
         alb.HorizontalFlip(p=0.25),
         alb.PadIfNeeded(min_height=40, min_width=40, border_mode=cv2.BORDER_REPLICATE, p=1.0),
-        alb.RandomCrop(height=32, width=32, p=1.0)
+        alb.RandomCrop(height=32, width=32, p=1.0),
         #alb_torch.transforms.ToTensor(),
         alb.Normalize(*stats)
         ], p=1.0)
