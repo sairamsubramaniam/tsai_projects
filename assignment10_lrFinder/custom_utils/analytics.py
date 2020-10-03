@@ -74,7 +74,7 @@ def plot_misclassified(imgs, targets, preds, nrows, ncols, skip=0,
                 idx += 1
                 continue
 
-            img = imgs[idx].reshape(28,28)
+            img = imgs[idx].reshape(32,32,3)
             title = "Act: " + str(targets[idx].item()) + ", Pred: " + str(preds[idx].item())
             chart_pos = pos[posidx]
             axes[chart_pos].imshow(img)
