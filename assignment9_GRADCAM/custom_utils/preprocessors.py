@@ -34,10 +34,17 @@ def calculate_mean_std(dataloader, device):
 
 
 
+[transforms.RandomRotation(10) ,
+transforms.RandomHorizontalFlip(0.25) ,
+transforms.ToTensor(),
+transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
+
+
 def best_cifar10_train_transforms(stats):
     return alb.Compose([
         alb.Rotate(limit=10), 
-        alb.HorizontalFlip(),
+        alb.HorizontalFlip(p=0.25),
         #alb_torch.transforms.ToTensor(),
         alb.Normalize(*stats)
         ], p=1.0)
