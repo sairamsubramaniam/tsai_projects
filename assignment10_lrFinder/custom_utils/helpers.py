@@ -75,9 +75,11 @@ def record_max_acc(max_acc, accuracy_store_path):
 
 
 
-def train_epochs(model, device, train_loader, test_loader, optimizer, loss_func, epochs,
+def train_epochs(model, device, train_loader, test_loader, 
+                 optimizer, loss_func, epochs,
                  accuracy_store_path=None, model_sd_save_path=None,
-                 save_if_better_acc=False):
+                 save_if_better_acc=False,
+                 manual_scheduler=None, auto_scheduler=None):
 
     if (bool(save_if_better_acc) + bool(model_sd_save_path)) == 1:
         raise Exception("If save_if_better_acc is True, then "
@@ -112,10 +114,17 @@ def train_epochs(model, device, train_loader, test_loader, optimizer, loss_func,
                         optimizer=optimizer, 
                         epoch=epoch, 
                         loss_func=loss_func)
+
+        if manual_scheduler:
+            manual_scheduler.step()
+
         tsl, tsa = test(model=model, 
                         device=device, 
                         test_loader=test_loader,
                         loss_func=loss_func)
+
+        if auto_scheduler:
+            auto_scheduler.step(tsl)
         
         train_acc.append(tra)
         test_acc.append(tsa)
