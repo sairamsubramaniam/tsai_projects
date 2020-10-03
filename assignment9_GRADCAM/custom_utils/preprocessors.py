@@ -53,11 +53,11 @@ def best_cifar10_train_transforms(stats):
     return alb.Compose([
         alb.Rotate(limit=10), 
         alb.HorizontalFlip(p=0.25),
-        #alb.PadIfNeeded(min_height=40, min_width=40, border_mode=cv2.BORDER_REPLICATE, p=1.0),
-        #alb.RandomCrop(height=32, width=32, p=1.0),
+        alb.PadIfNeeded(min_height=40, min_width=40, border_mode=cv2.BORDER_REPLICATE, p=1.0),
+        alb.RandomCrop(height=32, width=32, p=1.0),
         #alb_torch.transforms.ToTensor(),
-        # alb.Normalize(*stats)
-        alb.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))
+        alb.Normalize(*stats)
+        #alb.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))
         ], p=1.0)
 
 
@@ -118,8 +118,8 @@ def get_cifar10_loaders(root, device,
         stats = calculate_mean_std(dataloader=train_dl, device=device)
         print(stats)
         train_transforms = best_cifar10_train_transforms(stats)
-        # test_transforms = best_cifar10_test_transforms(stats)
-        test_transforms = best_cifar10_train_transforms(stats)
+        test_transforms = best_cifar10_test_transforms(stats)
+        # test_transforms = best_cifar10_train_transforms(stats)
 
 
     # Download datasets with transforms
