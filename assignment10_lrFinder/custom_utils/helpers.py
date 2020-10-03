@@ -124,7 +124,7 @@ def train_epochs(model, device, train_loader, test_loader,
                         loss_func=loss_func)
 
         if auto_scheduler:
-            auto_scheduler.step(tsl)
+            auto_scheduler.step(tsa)
         
         train_acc.append(tra)
         test_acc.append(tsa)
