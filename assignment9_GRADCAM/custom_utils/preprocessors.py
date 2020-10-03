@@ -39,12 +39,22 @@ def calculate_mean_std(dataloader, device):
 #transforms.ToTensor(),
 #transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
+# RandomCrop(height, width, always_apply=False, p=0.5)
+# ChannelDropout(channel_drop_range=(1, 1), fill_value=0, always_apply=False, p=0.5)
+# ChannelShuffle
+# CoarseDropout (max_holes=8, max_height=8, max_width=8, min_holes=None, min_height=None, min_width=None, fill_value=0, mask_fill_value=None, always_apply=False, p=0.5)
+# Cutout (num_holes=8, max_h_size=8, max_w_size=8, fill_value=0, always_apply=False, p=0.5)
+# HorizontalFlip
+# PadIfNeeded (min_height=1024, min_width=1024, pad_height_divisor=None, pad_width_divisor=None, border_mode=4, value=None, mask_value=None, always_apply=False, p=1.0)
+# RandomCrop (height, width, always_apply=False, p=1.0)
 
 
 def best_cifar10_train_transforms(stats):
     return alb.Compose([
-        alb.Rotate(limit=10), 
+        alb.Rotate(limit=10, p=0.2), 
         alb.HorizontalFlip(p=0.25),
+        alb.PadIfNeeded(min_height=40, min_width=40, border_mode=cv2.BORDER_REPLICATE, p=1.0),
+        alb.RandomCrop(height=32, width=32, p=1.0)
         #alb_torch.transforms.ToTensor(),
         alb.Normalize(*stats)
         ], p=1.0)
