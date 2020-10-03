@@ -51,10 +51,12 @@ def calculate_mean_std(dataloader, device):
 
 
 def best_cifar10_train_transforms(stats):
+    cutout_fill = sum(stats[0])
     return alb.Compose([
         alb.Rotate(limit=10, p=0.5), 
         alb.HorizontalFlip(p=0.2),
-        #alb.PadIfNeeded(min_height=40, min_width=40, border_mode=cv2.BORDER_REPLICATE, p=1.0),
+        alb.PadIfNeeded(min_height=48, min_width=48, border_mode=cv2.BORDER_REPLICATE, p=1.0),
+        alb.Cutout(num_holes=1, max_h_size=16, max_w_size=16, fill_value=cutout_fill)
         #alb.RandomCrop(height=32, width=32, p=1.0),
         alb.Normalize(mean=list(stats[0]), std=list(stats[1])),
         alb_torch.transforms.ToTensor()
