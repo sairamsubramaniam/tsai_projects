@@ -90,11 +90,11 @@ class AlbCifar10(Dataset):
         if self.transform:
             #img_np = np.array(img)
             augmented = self.transform(image=img)
-            img = augmented["image"]
+            new_img = augmented["image"]
             #h, w, c = img.shape
             #img = img.reshape(c, h, w)
             #img = Image.fromarray(augmented["image"])
-        return img, label
+        return new_img, label
 
 
 

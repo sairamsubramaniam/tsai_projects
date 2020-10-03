@@ -8,6 +8,7 @@ import torch
 from torch.utils.data import Dataset
 import torchvision
 from PIL import Image
+import cv2
 
 
 def calculate_mean_std(dataloader, device):
@@ -51,20 +52,20 @@ def calculate_mean_std(dataloader, device):
 
 def best_cifar10_train_transforms(stats):
     return alb.Compose([
-        alb.Rotate(limit=10, p=0.2), 
-        alb.HorizontalFlip(p=0.25),
-        alb.PadIfNeeded(min_height=40, min_width=40, border_mode=cv2.BORDER_REPLICATE, p=1.0),
-        alb.RandomCrop(height=32, width=32, p=1.0),
-        #alb_torch.transforms.ToTensor(),
-        alb.Normalize(*stats)
+        alb.Rotate(limit=10, p=0.5), 
+        alb.HorizontalFlip(p=0.2),
+        #alb.PadIfNeeded(min_height=40, min_width=40, border_mode=cv2.BORDER_REPLICATE, p=1.0),
+        #alb.RandomCrop(height=32, width=32, p=1.0),
+        alb.Normalize(mean=list(stats[0]), std=list(stats[1])),
+        alb_torch.transforms.ToTensor()
         ], p=1.0)
 
 
 
 def best_cifar10_test_transforms(stats):
     return alb.Compose([
-        #alb_torch.transforms.ToTensor(),
-        alb.Normalize(*stats)
+        alb.Normalize(*stats),
+        alb_torch.transforms.ToTensor()
         ], p=1.0)
 
 
@@ -76,21 +77,24 @@ class AlbCifar10(Dataset):
         
         self.ds = torchvision.datasets.CIFAR10(root=root, train=train, transform=None, 
                                          target_transform=target_transform, download=download)
+        self.images = self.ds.data
+        self.labels = self.ds.targets
         self.transform = transform
 
     def __len__(self):
         return len(self.ds)
 
     def __getitem__(self, idx):
-        img, target = self.ds[idx]
+        img = self.images[idx]
+        label = self.labels[idx]
         if self.transform:
-            img_np = np.array(img)
-            augmented = self.transform(image=img_np)
-            img = augmented["image"]
-            h, w, c = img.shape
-            img = img.reshape(c, h, w)
+            #img_np = np.array(img)
+            augmented = self.transform(image=img)
+            new_img = augmented["image"]
+            #h, w, c = img.shape
+            #img = img.reshape(c, h, w)
             #img = Image.fromarray(augmented["image"])
-        return img, target
+        return new_img, label
 
 
 
@@ -118,11 +122,14 @@ def get_cifar10_loaders(root, device,
         print(stats)
         train_transforms = best_cifar10_train_transforms(stats)
         test_transforms = best_cifar10_test_transforms(stats)
+        # test_transforms = best_cifar10_train_transforms(stats)
 
 
     # Download datasets with transforms
     train_ds = AlbCifar10(root=root, download=False, train=True, transform=train_transforms)
     test_ds = AlbCifar10(root=root, download=True, train=False, transform=test_transforms)
+    # train_ds = torchvision.datasets.CIFAR10(root=root, download=True, train=True, transform=torchvision.transforms.ToTensor())
+    # test_ds = torchvision.datasets.CIFAR10(root=root, download=True, train=False, transform=torchvision.transforms.ToTensor())
 
     # Create Dataloaders
     train_dl = torch.utils.data.DataLoader(train_ds, batch_size=train_batch_size, 
