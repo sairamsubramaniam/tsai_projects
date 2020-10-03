@@ -7,87 +7,6 @@ I plan to write my own versions when I get time!
 """
 
 
-import matplotlib.pyplot as plt
-#import helpers
-
-
-
-#def gradcam(model, device, image_batch):
-#    """
-#    http://gradcam.cloudcv.org/
-#    https://arxiv.org/abs/1610.02391
-#    Took this code from here
-#    """
-#    if (device.type == "cuda") and (not next(model.parameters()).is_cuda):
-#        model = model.to(device)
-#
-#    output = model(image_batch)
-#    vals, idxs = torch.max(output, dim=1, keepdim=True)
-#    zeros_temp = torch.zeros_like(output)
-#    g_output = zeros_temp.scatter_(dim=1, index=idxs, src=vals)
-#
-#    print(g_output)
-
-    
-
-
-
-def create_plot_pos(nrows, ncols):
-    num_images = nrows * ncols
-    positions = []
-    for r in range(num_images):
-        row = r // ncols
-        col = r % ncols
-        positions.append((row, col))
-    return positions
-
-
-
-def plot_misclassified(imgs, targets, preds, nrows, ncols, skip=0, 
-                       plt_scaler=(2,2.5), plt_fsize=12):
-    """
-    imgs is a tensor of all images
-    targets is a tensor of all label targets
-    preds is a tensor of all predictions from the model
-    """
-    matches = preds.eq(targets)
-
-    total_imgs = nrows*ncols
-    pos = create_plot_pos(nrows, ncols)
-
-    fig, axes = plt.subplots(nrows=nrows,
-                             ncols=ncols, 
-                             figsize=(ncols*plt_scaler[1], nrows*plt_scaler[0]), 
-                             sharex=True, 
-                             sharey=True)
-
-    idx = 0
-    posidx = 0
-    total_skipped = 0
-    for m in matches:
-        if posidx > total_imgs-1:
-            break
-
-        if not m:
-            if total_skipped <= skip:
-                total_skipped += 1
-                idx += 1
-                continue
-
-            img = imgs[idx].reshape(32,32,3)
-            title = "Act: " + str(targets[idx].item()) + ", Pred: " + str(preds[idx].item())
-            chart_pos = pos[posidx]
-            axes[chart_pos].imshow(img)
-            axes[chart_pos].set_title(title, fontsize=plt_fsize)
-            axes[chart_pos].axis("off")
-
-            posidx += 1
-        
-        idx += 1
-    
-    return fig, axes
-
-
 
 
 # CODE below lifted directly from here `https://github.com/jacobgil/pytorch-grad-cam/blob/master/gradcam.py`
@@ -145,6 +64,10 @@ class ModelOutputs():
             elif "avgpool" in name.lower():
                 x = module(x)
                 x = x.view(x.size(0),-1)
+            elif "linear" in name.lower():
+                x = F.avg_pool2d(x, 4)
+                x = x.view(x.size(0), -1)
+                x = module(x)
             else:
                 x = module(x)
 
@@ -160,7 +83,7 @@ def preprocess_image(img):
         preprocessed_img[:, :, i] = preprocessed_img[:, :, i] - means[i]
         preprocessed_img[:, :, i] = preprocessed_img[:, :, i] / stds[i]
     preprocessed_img = \
-        np.ascontiguousarray(np.transpose(preprocessed_img, (2, 0, 1)))
+        np.ascontiguousarray(np.transpose(preprocessed_img, (0, 1, 2)))
     preprocessed_img = torch.from_numpy(preprocessed_img)
     # preprocessed_img = preprocessed_img.type(torch.FloatTensor)
     preprocessed_img.unsqueeze_(0)
@@ -170,9 +93,10 @@ def preprocess_image(img):
 
 def show_cam_on_image(img, mask):
     heatmap = cv2.applyColorMap(np.uint8(255 * mask), cv2.COLORMAP_JET)
-    heatmap = np.float32(heatmap) / 255
-    cam = heatmap + np.float32(img)
+    heatmap = np.float32(heatmap)*2 / 255
+    cam = heatmap + np.float32( torch.from_numpy(img).permute(1,2,0).numpy() )
     cam = cam / np.max(cam)
+    cam = cv2.cvtColor(cam, cv2.COLOR_BGR2RGB)
     # cv2.imwrite("cam.jpg", np.uint8(255 * cam))
     return cam
 
@@ -257,7 +181,7 @@ def get_grad_cam_image(img, model, feature_module, target_layers, device=None):
 
     #img = cv2.imread(img, 1)
     img = np.asarray(img)
-    img = np.float32(cv2.resize(img, (224, 224))) / 255
+    #img = np.float32(cv2.resize(img, (32, 32))) / 255
     input = preprocess_image(img)
 
     # If None, returns the map for the highest scoring category.
@@ -268,5 +192,85 @@ def get_grad_cam_image(img, model, feature_module, target_layers, device=None):
     return show_cam_on_image(img, mask)
 
     
+
+
+
+
+##############################################################################################
+
+
+
+import matplotlib.pyplot as plt
+import cv2
+
+
+
+
+def create_plot_pos(nrows, ncols):
+    num_images = nrows * ncols
+    positions = []
+    for r in range(num_images):
+        row = r // ncols
+        col = r % ncols
+        positions.append((row, col))
+    return positions
+
+
+
+def plot_misclassified(imgs, targets, preds, nrows, ncols, skip=0, 
+                       plt_scaler=(2,2.5), plt_fsize=12, classes=None,
+                       gradcam_params=None):
+    """
+    imgs is a tensor of all images
+    targets is a tensor of all label targets
+    preds is a tensor of all predictions from the model
+    """
+    matches = preds.eq(targets)
+
+    total_imgs = nrows*ncols
+    pos = create_plot_pos(nrows, ncols)
+
+    fig, axes = plt.subplots(nrows=nrows,
+                             ncols=ncols, 
+                             figsize=(ncols*plt_scaler[1], nrows*plt_scaler[0]), 
+                             sharex=True, 
+                             sharey=True)
+
+    idx = 0
+    posidx = 0
+    total_skipped = 0
+    for m in matches:
+        if posidx > total_imgs-1:
+            break
+
+        if not m:
+            if total_skipped <= skip:
+                total_skipped += 1
+                idx += 1
+                continue
+
+            if gradcam_params:
+                img = get_grad_cam_image(img=imgs[idx], **gradcam_params)
+
+            else:
+                img = imgs[idx].permute(1,2,0)
+
+            if classes:
+                tgt = classes[targets[idx].item()]
+                prd = classes[preds[idx].item()]
+                title = "Act: " + str(tgt) + ", Pred: " + str(prd)
+            else:
+                title = "Act: " + str(targets[idx].item()) + ", Pred: " + str(preds[idx].item())
+
+            chart_pos = pos[posidx]
+            axes[chart_pos].imshow(img)
+            axes[chart_pos].set_title(title, fontsize=plt_fsize)
+            axes[chart_pos].axis("off")
+
+            posidx += 1
+        
+        idx += 1
+    
+    return fig, axes
 
 
