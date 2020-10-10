@@ -121,20 +121,20 @@ def get_cifar10_loaders(root, device,
     if set_seed:
         torch.manual_seed(1)
 
+    # Calculate Statistics for normalization
+
+    train_ds = torchvision.datasets.CIFAR10(root=root, download=True, train=True,
+                                            transform=torchvision.transforms.ToTensor())
+    train_dl = torch.utils.data.DataLoader(train_ds, batch_size=256, shuffle=False,  num_workers=2)
+    stats = calculate_mean_std(dataloader=train_dl, device=device)
+    print(stats)
+
     if not train_transforms:
         train_transforms = best_cifar10_train_transforms(stats)
 
     if not test_transforms:
         test_transforms = best_cifar10_test_transforms(stats)
 
-
-    # Calculate Statistics for normalization
-
-    train_ds = torchvision.datasets.CIFAR10(root=root, download=True, train=True,
-                                            transform=test_transforms)
-    train_dl = torch.utils.data.DataLoader(train_ds, batch_size=256, shuffle=False,  num_workers=2)
-    stats = calculate_mean_std(dataloader=train_dl, device=device)
-    print(stats)
 
 
     # Download datasets with transforms
