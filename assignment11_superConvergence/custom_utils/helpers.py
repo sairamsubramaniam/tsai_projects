@@ -133,7 +133,8 @@ def train_epochs(model, device, train_loader, test_loader,
 
         ep_start = time.time()
         print()
-        print("EPOCH NUM {}".format(epoch))
+        print("EPOCH NUM {},  LR Used: {}".format(epoch, 
+                                optimizer.state_dict[param_groups][0]["lr"]))
         
         trl, tra = train(model=model, 
                         device=device, 
