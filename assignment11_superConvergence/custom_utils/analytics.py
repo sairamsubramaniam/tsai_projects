@@ -299,8 +299,44 @@ def plot_cyclic_graph(cycles, lr_range, iterations):
     min_lr = lr_range[0]
     max_lr = lr_range[1]
 
+    temp_iters = int(iterations / cycles) * cycles
 
-    iters = int(iterations / cycles) * cycles
+    step = (temp_iters / cycles) / 2
+    step = int(step)
+
+    iters = step * 2 * cycles
+
+
+    upper_bound = [max_lr] * (iters + 1)
+    lower_bound = [min_lr] * (iters + 1)
+
+    cyclic_lrs = np.array([])
+
+    for cycle in range(cycles):
+        first_half = np.linspace(min_lr, max_lr, step+1)
+        first_half = first_half[:-1]
+        second_half = np.linspace(max_lr, min_lr, step+1)
+        second_half = second_half[:-1]
+        cur_cyc = np.concatenate([first_half, second_half])
+
+        cyclic_lrs = np.concatenate([cyclic_lrs, cur_cyc])
+
+    cyclic_lrs = np.append(cyclic_lrs, min_lr)
+
+    xaxis = list(range(1,iters+2))
+
+
+    fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(10, 3))
+
+    axes.plot(xaxis, upper_bound, label="Max LR")
+    axes.plot(xaxis, cyclic_lrs, label="Cyclic LR")
+    axes.plot(xaxis, lower_bound, label="Min LR")
+    axes.set_title("Cyclic Learning Rates", fontsize=20)
+    axes.set_xlabel("Iterations", fontsize=14)
+    axes.set_ylabel("LRs", fontsize=14)
+    axes.set_xticks(xaxis)
+    axes.tick_params(axis='both', which='major', labelsize=12)
+    axes.legend()
 
 
 

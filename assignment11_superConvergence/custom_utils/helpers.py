@@ -128,8 +128,10 @@ def train_epochs(model, device, train_loader, test_loader,
             peak_epoch = oclr_params["peak_epoch"]
             last_epoch = epochs+1
             max_lr = oclr_params["max_lr"]
+            min_lr = oclr_params.get("min_lr", None)
             optimizer = one_cycle_lr(epoch_num=epoch, peak_epoch=peak_epoch, 
-                                    last_epoch=last_epoch, model=model, max_lr=max_lr)
+                                    last_epoch=last_epoch, model=model, max_lr=max_lr,
+                                    min_lr=min_lr)
 
         ep_start = time.time()
         print("================================================================")
