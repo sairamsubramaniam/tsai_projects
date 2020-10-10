@@ -132,9 +132,9 @@ def train_epochs(model, device, train_loader, test_loader,
                                     last_epoch=last_epoch, model=model, max_lr=max_lr)
 
         ep_start = time.time()
-        print()
-        print("EPOCH NUM {},  LR Used: {}".format(epoch, 
-                                optimizer.state_dict[param_groups][0]["lr"]))
+        print("================================================================")
+        print("EPOCH NUM {},  LR USED: {}".format(epoch, 
+                                optimizer.state_dict()["param_groups"][0]["lr"]))
         
         trl, tra = train(model=model, 
                         device=device, 
