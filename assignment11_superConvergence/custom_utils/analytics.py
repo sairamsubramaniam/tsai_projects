@@ -202,7 +202,6 @@ def get_grad_cam_image(img, model, feature_module, target_layers, device=None):
 ##############################################################################################
 # All code below written by me (after learning a lot from useful github pages
 
-
 import cv2
 import matplotlib.pyplot as plt
 from tqdm import tqdm
@@ -285,12 +284,23 @@ def plot_lr_range_test(xaxis, yaxis):
 
     fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(10, 4))
 
-    axes.set_yscale("log")
     axes.plot(xaxis, yaxis, label="Test Accuracy")
+    axes.set_xscale("log")
     axes.set_title("Test Accuracies By LR", fontsize=20)
     axes.set_xlabel("Learning Rates", fontsize=14)
     axes.set_ylabel("Test Accuracies", fontsize=14)
     axes.set_xticks(xaxis)
     axes.tick_params(axis='both', which='major', labelsize=12)
     axes.legend()
+
+
+
+def plot_cyclic_graph(cycles, lr_range, iterations):
+    min_lr = lr_range[0]
+    max_lr = lr_range[1]
+
+
+    iters = int(iterations / cycles) * cycles
+
+
 

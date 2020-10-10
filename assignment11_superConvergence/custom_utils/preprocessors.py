@@ -107,7 +107,7 @@ class AlbCifar10(Dataset):
 
 
 def get_cifar10_loaders(root, device, 
-                    train_transforms="default", test_transforms="default", 
+                    train_transforms=None, test_transforms=None, 
                     train_batch_size=128, test_batch_size=256,
                     calc_stats_for="train", set_seed=1):
     """
@@ -121,23 +121,26 @@ def get_cifar10_loaders(root, device,
     if set_seed:
         torch.manual_seed(1)
 
-    # Calculate Statistics for normalization
-    if train_transforms == "default":
-        train_ds = torchvision.datasets.CIFAR10(root=root, download=True, train=True,
-                                                transform=torchvision.transforms.ToTensor())
-        train_dl = torch.utils.data.DataLoader(train_ds, batch_size=256, shuffle=False,  num_workers=2)
-        stats = calculate_mean_std(dataloader=train_dl, device=device)
-        print(stats)
+    if not train_transforms:
         train_transforms = best_cifar10_train_transforms(stats)
+
+    if not test_transforms:
         test_transforms = best_cifar10_test_transforms(stats)
-        # test_transforms = best_cifar10_train_transforms(stats)
+
+
+    # Calculate Statistics for normalization
+
+    train_ds = torchvision.datasets.CIFAR10(root=root, download=True, train=True,
+                                            transform=test_transforms)
+    train_dl = torch.utils.data.DataLoader(train_ds, batch_size=256, shuffle=False,  num_workers=2)
+    stats = calculate_mean_std(dataloader=train_dl, device=device)
+    print(stats)
 
 
     # Download datasets with transforms
     train_ds = AlbCifar10(root=root, download=False, train=True, transform=train_transforms)
     test_ds = AlbCifar10(root=root, download=True, train=False, transform=test_transforms)
-    # train_ds = torchvision.datasets.CIFAR10(root=root, download=True, train=True, transform=torchvision.transforms.ToTensor())
-    # test_ds = torchvision.datasets.CIFAR10(root=root, download=True, train=False, transform=torchvision.transforms.ToTensor())
+
 
     # Create Dataloaders
     train_dl = torch.utils.data.DataLoader(train_ds, batch_size=train_batch_size, 

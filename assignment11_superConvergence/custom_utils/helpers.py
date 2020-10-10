@@ -68,30 +68,6 @@ def train(model, device, train_loader, optimizer, epoch, loss_func):
 
 
 
-def train_single_batch(model, device, data, target, optimizer, loss_func, iter_num=0):
-
-    if (device.type == "cuda") and (not next(model.parameters()).is_cuda):
-        model = model.to(device)
-
-    model.train()
-
-    optimizer.zero_grad()
-    output = model(data)
-    loss = loss_func(output, target)
-    train_loss = loss.item()
-    pred = output.argmax(dim=1, keepdim=True)
-    correct = pred.eq(target.view_as(pred)).sum().item()
-
-    loss.backward()
-    optimizer.step()
-
-    return train_loss, correct
-
-
-
-
-
-
 def record_max_acc(max_acc, accuracy_store_path):
     f = open(accuracy_store_path, "w")
     f.write(str(max_acc))
@@ -228,9 +204,9 @@ def test_lr_effectiveness(model, device, train_loader, test_loader,
 
     train_loss = 0
     correct = 0
-    # pbar = tqdm(range(iterations))
+    pbar = tqdm(range(iterations), position=0, leave=True)
 
-    for inum in range(iterations):
+    for inum in pbar:
 
         try:
             data, target = next(dl_iterator)
@@ -239,14 +215,21 @@ def test_lr_effectiveness(model, device, train_loader, test_loader,
             data, target = next(dl_iterator)
 
         data, target = data.to(device), target.to(device)
-        tloss, crrct = train_single_batch(
-                                model=model, device=device,
-                                data=data, target=target, optimizer=optimizer,
-                                loss_func=loss_func, iter_num=inum)
+
+        optimizer.zero_grad()
+        output = model(data)
+        loss = loss_func(output, target)
+        t_loss = loss.item()
+        pred = output.argmax(dim=1, keepdim=True)
+        crrct = pred.eq(target.view_as(pred)).sum().item()
+
+        loss.backward()
+        optimizer.step()
+
 
         train_loss += tloss
         correct += crrct
-        # pbar.set_description(desc= f'loss={tloss} iteration={inum}')
+        pbar.set_description(desc= f'loss={tloss} iteration={inum}')
     
     total_imgs = len(train_loader.dataset)
     train_loss /= total_imgs
@@ -258,6 +241,8 @@ def test_lr_effectiveness(model, device, train_loader, test_loader,
 
 
     tst_loss, tst_acc = test(model=model, device=device, test_loader=test_loader, loss_func=loss_func)
+
+    print('\nTest Loss: {:.4f}, Accuracy: {:.4f}%'.format(tst_loss, tst_acc))
     
     return tst_loss, tst_acc
 
@@ -272,8 +257,8 @@ def run_lr_range_test(model_class, device, train_loader, test_loader,
         lr = lr/0.1
 
     yaxis = []
-    pbar = tqdm(lr_range, position=0, leave=True)
-    for lr in pbar:
+
+    for lr in lr_range:
         model = model_class()
         optimizer = torch.optim.SGD(model.parameters(), lr=lr, weight_decay=0.0, momentum=0.9)
 
@@ -282,7 +267,7 @@ def run_lr_range_test(model_class, device, train_loader, test_loader,
                                  test_loader=test_loader, optimizer=optimizer,
                                  loss_func=loss_func, iterations=iterations)
 
-        pbar.set_description(desc= f'lr={lr}, test_accuracy={tst_acc}')
+        print(f'lr={lr}, test_accuracy={tst_acc}')
 
         yaxis.append(tst_acc)
 
