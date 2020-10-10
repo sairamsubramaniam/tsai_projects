@@ -285,6 +285,7 @@ def plot_lr_range_test(xaxis, yaxis):
 
     fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(10, 4))
 
+    axes.set_yscale("log")
     axes.plot(xaxis, yaxis, label="Test Accuracy")
     axes.set_title("Test Accuracies By LR", fontsize=20)
     axes.set_xlabel("Learning Rates", fontsize=14)

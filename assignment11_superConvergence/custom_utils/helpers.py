@@ -99,11 +99,30 @@ def record_max_acc(max_acc, accuracy_store_path):
 
 
 
+def one_cycle_lr(epoch_num, peak_epoch, last_epoch, model, max_lr, min_lr=None, optim_class=torch.optim.SGD):
+
+    if not min_lr:
+        min_lr = max_lr / 10.0
+
+    a = np.linspace(min_lr, max_lr, peak_epoch)
+    b = np.linspace(max_lr, min_lr, last_epoch-peak_epoch+1)
+
+    lrs = np.concatenate([a, b[1:]])
+
+    lr = lrs[epoch_num-1]
+
+    optimizer = optim_class(model.parameters(), lr=lr, weight_decay=0.0005, momentum=0.9)
+
+    return optimizer
+
+
+
 def train_epochs(model, device, train_loader, test_loader, 
                  optimizer, loss_func, epochs,
                  accuracy_store_path=None, model_sd_save_path=None,
                  save_if_better_acc=False,
-                 manual_scheduler=None, auto_scheduler=None):
+                 manual_scheduler=None, auto_scheduler=None,
+                 oclr_params=None):
 
     if (bool(save_if_better_acc) + bool(model_sd_save_path)) == 1:
         raise Exception("If save_if_better_acc is True, then "
@@ -126,7 +145,14 @@ def train_epochs(model, device, train_loader, test_loader,
     test_losses = []
 
     start = time.time()
-    for epoch in range(1, epochs):
+    for epoch in range(1, epochs+1):
+
+        if oclr_params:
+            peak_epoch = oclr_params["peak_epoch"]
+            last_epoch = epochs+1
+            max_lr = oclr_params["max_lr"]
+            optimizer = one_cycle_lr(epoch_num=epoch, peak_epoch=peak_epoch, 
+                                    last_epoch=last_epoch, model=model, max_lr=max_lr)
 
         ep_start = time.time()
         print()
