@@ -1,0 +1,12 @@
+# OpenCV package not found while running make on darknet repo
+https://github.com/pjreddie/darknet/issues/1886
+
+# error: OpenCV(4.4.0) /tmp/pip-req-build-vu_aq9yd/opencv/modules/dnn/src/darknet/darknet_importer.cpp:207: error: (-212:Parsing error) Failed to parse NetParameter file: yolov3.cfg in function 'readNetFromDarknet'
+Step1: Cloned the darknet repo and ran make
+
+Got this error:
+# OpenCV package not found while running make on darknet repo
+Fixed it using instructions from: https://github.com/pjreddie/darknet/issues/1886
+
+After that:
+Download the weight files from here https://pjreddie.com/darknet/yolo/
