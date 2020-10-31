@@ -19,5 +19,6 @@ We also had to modify two script files - evaluate.py and visualize_utils.py in o
 getting too many files (that we will not be using in our training) as output and thereby save some space  
 on google colab and google drive
 
-
+## Link to the dataset for assignment submission:
+https://drive.google.com/drive/folders/1CS5Xt2gHY2W25sSAl4KeK7a_bwzPvtTo?usp=sharing
 
