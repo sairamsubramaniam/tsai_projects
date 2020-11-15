@@ -87,7 +87,6 @@ class PlaneRCNNDetector():
         return
 
     def detect(self, sample):
-
         input_pair = []
         detection_pair = []
         camera = sample[30][0].cuda()
