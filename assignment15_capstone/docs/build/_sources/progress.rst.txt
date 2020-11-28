@@ -1,2 +1,4 @@
-wip
-===
+Progress
+========
+
+Studying the networks

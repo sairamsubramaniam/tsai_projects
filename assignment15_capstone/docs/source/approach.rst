@@ -7,12 +7,14 @@ Requirement
 The assignment was to:  
 
 a) Create an encoder-decoder like network that would take in an image and output:
+
   - Depth image
   - Object bounding boxes
   - Object segmentation
 
 b) Since, it is difficult to train a network from scratch in free resources like colab,  
 we were allowed to use pretrained weights from pre-existing networks like:
+
   - `Yolo <https://github.com/pjreddie/darknet>`_ for object detection
   - `MiDaS <https://github.com/intel-isl/MiDaS>`_ for depth estimation
   - `Planercnn <https://github.com/NVlabs/planercnn>`_ for segmentation
