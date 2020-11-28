@@ -35,7 +35,62 @@
             
   <div class="section" id="progress">
 <h1>Progress<a class="headerlink" href="#progress" title="Permalink to this headline">¶</a></h1>
-<p>Studying the networks</p>
+<div class="section" id="studying-the-networks">
+<h2>Studying the networks<a class="headerlink" href="#studying-the-networks" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>I tried printing the network structure and they look like this:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/network_reference/planercnn">Planercnn</a></p></li>
+<li><p><a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/network_reference/midas">Midas</a></p></li>
+<li><p><a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/network_reference/yolo_network">YoloV3</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="joining-planercnn-and-midas">
+<h2>Joining planercnn and midas<a class="headerlink" href="#joining-planercnn-and-midas" title="Permalink to this headline">¶</a></h2>
+<p>Next step was to take the first two networks and join them as described in the “approach” section.</p>
+<p>To do that,</p>
+<blockquote>
+<div><ul>
+<li><p>I first extracted weights from Midas using this <a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/others/Save_Midas_Weights_as_PIckle.ipynb">notebook</a></p></li>
+<li><p>Added ‘Midas Scratch’ network <a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/1dc8d351becb9df3ef716dfbbc6ab46d36c55dfd/assignment15_capstone/planercnn_midas/models/all_in_one.py#L288">here</a></p></li>
+<li><p>Studied the <code class="code docutils literal notranslate"><span class="pre">datasets/*</span></code> scripts and found that the planercnn code expects
+the input data structure to be like this:</p>
+<div class="line-block">
+<div class="line">.</div>
+<div class="line">└── ScanNet</div>
+<div class="line-block">
+<div class="line">├── invalid_indices_test.txt</div>
+<div class="line">├── invalid_indices_train.txt</div>
+<div class="line">├── ScanNet</div>
+<div class="line">│   └── Tasks</div>
+<div class="line">│       └── Benchmark</div>
+<div class="line">│           ├── scannetv1_test.txt</div>
+<div class="line">│           └── scannetv1_train.txt</div>
+<div class="line">├── scannetv2-labels.combined.tsv</div>
+<div class="line">├── scans</div>
+<div class="line">│   └── 0</div>
+<div class="line">│       ├── 0.txt</div>
+<div class="line">│       ├── annotation</div>
+<div class="line">│       │   ├── plane_info.npy</div>
+<div class="line">│       │   ├── planes.npy</div>
+<div class="line">│       │   └── segmentation</div>
+<div class="line">│       │       └── 0.png</div>
+<div class="line">│       └── frames</div>
+<div class="line">│           ├── color</div>
+<div class="line">│           │   └── 0.jpg</div>
+<div class="line">│           ├── depth</div>
+<div class="line">│           │   └── 0.png</div>
+<div class="line">│           └── pose</div>
+<div class="line">│               └── 0.txt</div>
+<div class="line">└── scene.txt</div>
+</div>
+</div>
+</li>
+<li><p>abcd</p></li>
+</ul>
+</div></blockquote>
+</div>
 </div>
 
 
@@ -58,7 +113,11 @@
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="approach.html">Approach</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Progress</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Progress</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#studying-the-networks">Studying the networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#joining-planercnn-and-midas">Joining planercnn and midas</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="open_questions.html">wip</a></li>
 </ul>
 
