@@ -34,6 +34,129 @@
             
   <div class="section" id="eva5p1-capstone-detection-depth-and-segmentation">
 <h1>EVA5P1 Capstone - Detection, Depth and Segmentation<a class="headerlink" href="#eva5p1-capstone-detection-depth-and-segmentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="approach">
+<h2>Approach<a class="headerlink" href="#approach" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="requirement">
+<h3>Requirement<a class="headerlink" href="#requirement" title="Permalink to this headline">¶</a></h3>
+<p>The assignment was to:</p>
+<ol class="loweralpha simple">
+<li><p>Create an encoder-decoder like network that would take in an image and output:</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Depth image</p></li>
+<li><p>Object bounding boxes</p></li>
+<li><p>Object segmentation</p></li>
+</ul>
+</div></blockquote>
+<p>b) Since, it is difficult to train a network from scratch in free resources like colab,
+we were allowed to use pretrained weights from pre-existing networks like:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://github.com/pjreddie/darknet">Yolo</a> for object detection</p></li>
+<li><p><a class="reference external" href="https://github.com/intel-isl/MiDaS">MiDaS</a> for depth estimation</p></li>
+<li><p><a class="reference external" href="https://github.com/NVlabs/planercnn">Planercnn</a> for segmentation</p></li>
+</ul>
+</div></blockquote>
+<p>c) This concession was also made because all the above three networks have Resnet as backbone.
+It would therefore be easier to have on encoder to take in an image and three decoders to output
+the three different things.</p>
+</div>
+<div class="section" id="id1">
+<h3>Approach<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>Planercnn was the most difficult of the three networks, because it required lot of system setup:</dt><dd><ul class="simple">
+<li><p>CUDA 8.0</p></li>
+<li><p>GCC 5.0</p></li>
+<li><p>Pytorch 0.4.0</p></li>
+</ul>
+</dd>
+</dl>
+<p>The plan was therefore to study the code of planercnn and integrate the other two networks alongwith
+the trained weights into it.
+Once done, we could freeze / train appropriate layers to get better accuracy</p>
+</div>
+</div>
+<div class="section" id="progress">
+<h2>Progress<a class="headerlink" href="#progress" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="studying-the-networks">
+<h3>Studying the networks<a class="headerlink" href="#studying-the-networks" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>I tried printing the network structure and they look like this:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/network_reference/planercnn">Planercnn</a></p></li>
+<li><p><a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/network_reference/midas">Midas</a></p></li>
+<li><p><a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/network_reference/yolo_network">YoloV3</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="joining-planercnn-and-midas">
+<h3>Joining planercnn and midas<a class="headerlink" href="#joining-planercnn-and-midas" title="Permalink to this headline">¶</a></h3>
+<p>Next step was to take the first two networks and join them as described in the “approach” section.</p>
+<p>To do that,</p>
+<blockquote>
+<div><ul>
+<li><p>I first extracted weights from Midas using this <a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/others/Save_Midas_Weights_as_PIckle.ipynb">notebook</a></p></li>
+<li><p>Added ‘Midas Scratch’ network <a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/1dc8d351becb9df3ef716dfbbc6ab46d36c55dfd/assignment15_capstone/planercnn_midas/models/all_in_one.py#L288">here</a></p></li>
+<li><p>Studied the <code class="code docutils literal notranslate"><span class="pre">datasets/*</span></code> scripts and found that the planercnn code expects
+the input data structure to be like this:</p>
+<div class="line-block">
+<div class="line">.</div>
+<div class="line">└── ScanNet</div>
+<div class="line-block">
+<div class="line">├── invalid_indices_test.txt</div>
+<div class="line">├── invalid_indices_train.txt</div>
+<div class="line">├── ScanNet</div>
+<div class="line">│   └── Tasks</div>
+<div class="line">│       └── Benchmark</div>
+<div class="line">│           ├── scannetv1_test.txt</div>
+<div class="line">│           └── scannetv1_train.txt</div>
+<div class="line">├── scannetv2-labels.combined.tsv</div>
+<div class="line">├── scans</div>
+<div class="line">│   └── 0</div>
+<div class="line">│       ├── 0.txt</div>
+<div class="line">│       ├── annotation</div>
+<div class="line">│       │   ├── plane_info.npy</div>
+<div class="line">│       │   ├── planes.npy</div>
+<div class="line">│       │   └── segmentation</div>
+<div class="line">│       │       └── 0.png</div>
+<div class="line">│       └── frames</div>
+<div class="line">│           ├── color</div>
+<div class="line">│           │   └── 0.jpg</div>
+<div class="line">│           ├── depth</div>
+<div class="line">│           │   └── 0.png</div>
+<div class="line">│           └── pose</div>
+<div class="line">│               └── 0.txt</div>
+<div class="line">└── scene.txt</div>
+</div>
+</div>
+</li>
+<li><p>After creating a dummy dataset with 1 image in the above structure, I ran evaluate using default weights:</p></li>
+</ul>
+</div></blockquote>
+<dl>
+<dt>Input Image:</dt><dd><a class="reference external image-reference" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/input_data/0.jpg"><img alt="input image" src="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/input_data/0.jpg" /></a>
+</dd>
+<dt>Segmentation output of planercnn:</dt><dd><a class="reference external image-reference" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_segmentation_0_final.png"><img alt="segmentation output" src="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_segmentation_0_final.png" /></a>
+</dd>
+<dt>Depth output of midas:</dt><dd><a class="reference external image-reference" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_midasDepth_0.png"><img alt="midas depth output" src="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_midasDepth_0.png" /></a>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="unsolved-questions">
+<h2>Unsolved Questions<a class="headerlink" href="#unsolved-questions" title="Permalink to this headline">¶</a></h2>
+<p>In planercnn:</p>
+<ul class="simple">
+<li><p>In scannet, <a class="reference external" href="https://github.com/NVlabs/planercnn/blob/2698414a44eaa164f5174f7fe3c87dfc4d5dea3b/datasets/scannet_scene.py#L156">here</a> what is being done?</p></li>
+<li><p>What do these contain:</p>
+<ul>
+<li><p>plane_info.npy</p></li>
+<li><p>The planes file of the shape nx3</p></li>
+</ul>
+</li>
+<li><p>The train script kept getting stuck while “reading the depth.png file”, I could never find out why!</p></li>
+</ul>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -51,13 +174,6 @@
 </ul>
 </div>
 </div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
 </div>
 
 
