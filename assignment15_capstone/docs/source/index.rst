@@ -6,7 +6,7 @@
 EVA5P1 Capstone - Detection, Depth and Segmentation
 *******************************************************************************
 
-Approach
+Background
 ============================
 
 Requirement
@@ -44,6 +44,9 @@ the trained weights into it.
 Once done, we could freeze / train appropriate layers to get better accuracy
 
 
+|
+|
+|
 
 
 Progress
@@ -113,7 +116,11 @@ Depth output of midas:
   :alt: midas depth output
   :target: https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_midasDepth_0.png
 
-    
+
+|
+|
+|
+
 
 Unsolved Questions
 ==========================
@@ -129,6 +136,11 @@ In planercnn:
   * The planes file of the shape nx3
 
 * The train script kept getting stuck while "reading the depth.png file", I could never find out why!
+
+
+|
+|
+|
 
 
 

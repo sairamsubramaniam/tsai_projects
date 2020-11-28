@@ -34,8 +34,8 @@
             
   <div class="section" id="eva5p1-capstone-detection-depth-and-segmentation">
 <h1>EVA5P1 Capstone - Detection, Depth and Segmentation<a class="headerlink" href="#eva5p1-capstone-detection-depth-and-segmentation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="approach">
-<h2>Approach<a class="headerlink" href="#approach" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="requirement">
 <h3>Requirement<a class="headerlink" href="#requirement" title="Permalink to this headline">¶</a></h3>
 <p>The assignment was to:</p>
@@ -62,8 +62,8 @@ we were allowed to use pretrained weights from pre-existing networks like:</p>
 It would therefore be easier to have on encoder to take in an image and three decoders to output
 the three different things.</p>
 </div>
-<div class="section" id="id1">
-<h3>Approach<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="approach">
+<h3>Approach<a class="headerlink" href="#approach" title="Permalink to this headline">¶</a></h3>
 <dl class="simple">
 <dt>Planercnn was the most difficult of the three networks, because it required lot of system setup:</dt><dd><ul class="simple">
 <li><p>CUDA 8.0</p></li>
@@ -75,6 +75,11 @@ the three different things.</p>
 <p>The plan was therefore to study the code of planercnn and integrate the other two networks alongwith
 the trained weights into it.
 Once done, we could freeze / train appropriate layers to get better accuracy</p>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
 </div>
 </div>
 <div class="section" id="progress">
@@ -142,6 +147,11 @@ the input data structure to be like this:</p>
 <dt>Depth output of midas:</dt><dd><a class="reference external image-reference" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_midasDepth_0.png"><img alt="midas depth output" src="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_midasDepth_0.png" /></a>
 </dd>
 </dl>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
 </div>
 </div>
 <div class="section" id="unsolved-questions">
@@ -157,6 +167,11 @@ the input data structure to be like this:</p>
 </li>
 <li><p>The train script kept getting stuck while “reading the depth.png file”, I could never find out why!</p></li>
 </ul>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
