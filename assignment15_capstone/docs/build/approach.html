@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Approach &#8212; EVA5P1 Capstone - Detection, Depth and Segmentation  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Progress" href="progress.html" />
+    <link rel="prev" title="EVA5P1 Capstone - Detection, Depth and Segmentation" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="approach">
+<h1>Approach<a class="headerlink" href="#approach" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirement">
+<h2>Requirement<a class="headerlink" href="#requirement" title="Permalink to this headline">¶</a></h2>
+<p>The assignment was to:</p>
+<ol class="loweralpha simple">
+<li><p>Create an encoder-decoder like network that would take in an image and output:</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Depth image</p></li>
+<li><p>Object bounding boxes</p></li>
+<li><p>Object segmentation</p></li>
+</ul>
+</div></blockquote>
+<p>b) Since, it is difficult to train a network from scratch in free resources like colab,
+we were allowed to use pretrained weights from pre-existing networks like:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://github.com/pjreddie/darknet">Yolo</a> for object detection</p></li>
+<li><p><a class="reference external" href="https://github.com/intel-isl/MiDaS">MiDaS</a> for depth estimation</p></li>
+<li><p><a class="reference external" href="https://github.com/NVlabs/planercnn">Planercnn</a> for segmentation</p></li>
+</ul>
+</div></blockquote>
+<p>c) This concession was also made because all the above three networks have Resnet as backbone.
+It would therefore be easier to have on encoder to take in an image and three decoders to output
+the three different things.</p>
+</div>
+<div class="section" id="id1">
+<h2>Approach<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Planercnn was the most difficult of the three networks, because it required lot of system setup:</dt><dd><ul class="simple">
+<li><p>CUDA 8.0</p></li>
+<li><p>GCC 5.0</p></li>
+<li><p>Pytorch 0.4.0</p></li>
+</ul>
+</dd>
+</dl>
+<p>The plan was therefore to study the code of planercnn and integrate the other two networks alongwith
+the trained weights into it.
+Once done, we could freeze / train appropriate layers to get better accuracy</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">EVA5P1 Capstone - Detection, Depth and Segmentation</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Approach</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirement">Requirement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Approach</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="progress.html">Progress</a></li>
+<li class="toctree-l1"><a class="reference internal" href="open_questions.html">wip</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">EVA5P1 Capstone - Detection, Depth and Segmentation</a></li>
+      <li>Next: <a href="progress.html" title="next chapter">Progress</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Sairam Subramaniam.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/approach.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

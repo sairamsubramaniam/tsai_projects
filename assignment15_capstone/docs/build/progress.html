@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Progress &#8212; EVA5P1 Capstone - Detection, Depth and Segmentation  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="wip" href="open_questions.html" />
+    <link rel="prev" title="Approach" href="approach.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="progress">
+<h1>Progress<a class="headerlink" href="#progress" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="studying-the-networks">
+<h2>Studying the networks<a class="headerlink" href="#studying-the-networks" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>I tried printing the network structure and they look like this:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/network_reference/planercnn">Planercnn</a></p></li>
+<li><p><a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/network_reference/midas">Midas</a></p></li>
+<li><p><a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/network_reference/yolo_network">YoloV3</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="joining-planercnn-and-midas">
+<h2>Joining planercnn and midas<a class="headerlink" href="#joining-planercnn-and-midas" title="Permalink to this headline">¶</a></h2>
+<p>Next step was to take the first two networks and join them as described in the “approach” section.</p>
+<p>To do that,</p>
+<blockquote>
+<div><ul>
+<li><p>I first extracted weights from Midas using this <a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/others/Save_Midas_Weights_as_PIckle.ipynb">notebook</a></p></li>
+<li><p>Added ‘Midas Scratch’ network <a class="reference external" href="https://github.com/sairamsubramaniam/tsai_projects/blob/1dc8d351becb9df3ef716dfbbc6ab46d36c55dfd/assignment15_capstone/planercnn_midas/models/all_in_one.py#L288">here</a></p></li>
+<li><p>Studied the <code class="code docutils literal notranslate"><span class="pre">datasets/*</span></code> scripts and found that the planercnn code expects
+the input data structure to be like this:</p>
+<div class="line-block">
+<div class="line">.</div>
+<div class="line">└── ScanNet</div>
+<div class="line-block">
+<div class="line">├── invalid_indices_test.txt</div>
+<div class="line">├── invalid_indices_train.txt</div>
+<div class="line">├── ScanNet</div>
+<div class="line">│   └── Tasks</div>
+<div class="line">│       └── Benchmark</div>
+<div class="line">│           ├── scannetv1_test.txt</div>
+<div class="line">│           └── scannetv1_train.txt</div>
+<div class="line">├── scannetv2-labels.combined.tsv</div>
+<div class="line">├── scans</div>
+<div class="line">│   └── 0</div>
+<div class="line">│       ├── 0.txt</div>
+<div class="line">│       ├── annotation</div>
+<div class="line">│       │   ├── plane_info.npy</div>
+<div class="line">│       │   ├── planes.npy</div>
+<div class="line">│       │   └── segmentation</div>
+<div class="line">│       │       └── 0.png</div>
+<div class="line">│       └── frames</div>
+<div class="line">│           ├── color</div>
+<div class="line">│           │   └── 0.jpg</div>
+<div class="line">│           ├── depth</div>
+<div class="line">│           │   └── 0.png</div>
+<div class="line">│           └── pose</div>
+<div class="line">│               └── 0.txt</div>
+<div class="line">└── scene.txt</div>
+</div>
+</div>
+</li>
+<li><p>After creating a dummy dataset with 1 image in the above structure, I ran evaluate using default weights:</p></li>
+</ul>
+</div></blockquote>
+<dl>
+<dt>Input Image:</dt><dd><a class="reference external image-reference" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/input_data/0.jpg"><img alt="input image" src="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/input_data/0.jpg" /></a>
+</dd>
+<dt>Segmentation output of planercnn:</dt><dd><a class="reference external image-reference" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_segmentation_0_final.png"><img alt="segmentation output" src="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_segmentation_0_final.png" /></a>
+</dd>
+<dt>Depth output of midas:</dt><dd><a class="reference external image-reference" href="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_midasDepth_0.png"><img alt="midas depth output" src="https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_midasDepth_0.png" /></a>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">EVA5P1 Capstone - Detection, Depth and Segmentation</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="approach.html">Approach</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Progress</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#studying-the-networks">Studying the networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#joining-planercnn-and-midas">Joining planercnn and midas</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="open_questions.html">wip</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="approach.html" title="previous chapter">Approach</a></li>
+      <li>Next: <a href="open_questions.html" title="next chapter">wip</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Sairam Subramaniam.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/progress.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
