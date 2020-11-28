@@ -48,6 +48,23 @@ To do that,
     |     │               └── 0.txt
     |     └── scene.txt
 
-  - After creating a dummy dataset with 1 image in the above structure, I ran evaluate and got these results:
-    | Segmentation output of planercnn:
-    | ..image:: 
+  - After creating a dummy dataset with 1 image in the above structure, I ran evaluate using default weights:
+
+Input Image:
+ .. image:: https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/input_data/0.jpg
+  :alt: input image
+  :target: https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/input_data/0.jpg
+
+Segmentation output of planercnn:
+ .. image:: https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_segmentation_0_final.png
+  :alt: segmentation output
+  :target: https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_segmentation_0_final.png
+    
+Depth output of midas:
+ .. image:: https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_midasDepth_0.png
+  :alt: midas depth output
+  :target: https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_midasDepth_0.png
+
+    
+
+
