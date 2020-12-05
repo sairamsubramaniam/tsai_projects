@@ -8,6 +8,7 @@ EVA5P1 Capstone - Detection, Depth and Segmentation
 
 |
 |
+
 **NOTE**: I could not complete this assignment. This doc is only a record of my progress in the assignment.
 |
 |
@@ -108,17 +109,17 @@ To do that,
   - After creating a dummy dataset with 1 image in the above structure, I ran evaluate using default weights:
 
 Input Image:
- .. image:: https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/input_data/0.jpg
+ .. image:: https://res.cloudinary.com/ss-da/image/upload/v1607166833/0_giwihm.jpg
   :alt: input image
   :target: https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/input_data/0.jpg
 
 Segmentation output of planercnn:
- .. image:: https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_segmentation_0_final.png
+ .. image:: https://res.cloudinary.com/ss-da/image/upload/v1607166855/0_segmentation_0_final_nzr8vq.png
   :alt: segmentation output
   :target: https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_segmentation_0_final.png
     
 Depth output of midas:
- .. image:: https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_midasDepth_0.png
+ .. image:: https://res.cloudinary.com/ss-da/image/upload/v1607166854/0_midasDepth_0_ncgam1.png
   :alt: midas depth output
   :target: https://github.com/sairamsubramaniam/tsai_projects/blob/master/assignment15_capstone/planercnn_midas/output_data/0_midasDepth_0.png
 
@@ -139,11 +140,6 @@ In planercnn:
 
   * plane_info.npy
 
-  * The planes file of the shape nx3
-
-* The train script kept getting stuck while "reading the depth.png file", I could never find out why!
-
-
 |
 |
 |
@@ -155,8 +151,5 @@ In planercnn:
    :maxdepth: 2
    :caption: Contents:
 
-   approach
-   progress
-   open_questions
 
 

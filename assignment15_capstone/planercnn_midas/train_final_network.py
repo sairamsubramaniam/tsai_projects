@@ -159,56 +159,6 @@ def train(options):
                     continue
                 rpn_class_logits, rpn_pred_bbox, target_class_ids, mrcnn_class_logits, target_deltas, mrcnn_bbox, target_mask, mrcnn_mask, target_parameters, mrcnn_parameters, detections, detection_masks, detection_gt_parameters, detection_gt_masks, rpn_rois, roi_features, roi_indices, midas_depth, feature_map, depth_np_pred = model.predict([images, image_metas, gt_class_ids, gt_boxes, gt_masks, gt_parameters, camera], mode='training_detection', use_nms=2, use_refinement='refinement' in options.suffix, return_feature_map=True)
 
-                print("---------------")
-                print(midas_depth)
-
-
-                with open('output_rpn_class_logits.pkl', 'wb') as otfl_rpn_class_logits:
-                    pickle.dump(rpn_class_logits, otfl_rpn_class_logits)
-                with open('output_rpn_pred_bbox.pkl', 'wb') as otfl_rpn_pred_bbox:
-                    pickle.dump(rpn_pred_bbox, otfl_rpn_pred_bbox)
-                with open('output_target_class_ids.pkl', 'wb') as otfl_target_class_ids:
-                    pickle.dump(target_class_ids, otfl_target_class_ids)
-                with open('output_mrcnn_class_logits.pkl', 'wb') as otfl_mrcnn_class_logits:
-                    pickle.dump(mrcnn_class_logits, otfl_mrcnn_class_logits)
-                with open('output_target_deltas.pkl', 'wb') as otfl_target_deltas:
-                    pickle.dump(target_deltas, otfl_target_deltas)
-                with open('output_mrcnn_bbox.pkl', 'wb') as otfl_mrcnn_bbox:
-                    pickle.dump(mrcnn_bbox, otfl_mrcnn_bbox)
-                with open('output_target_mask.pkl', 'wb') as otfl_target_mask:
-                    pickle.dump(target_mask, otfl_target_mask)
-                with open('output_mrcnn_mask.pkl', 'wb') as otfl_mrcnn_mask:
-                    pickle.dump(mrcnn_mask, otfl_mrcnn_mask)
-                with open('output_target_parameters.pkl', 'wb') as otfl_target_parameters:
-                    pickle.dump(target_parameters, otfl_target_parameters)
-                with open('output_mrcnn_parameters.pkl', 'wb') as otfl_mrcnn_parameters:
-                    pickle.dump(mrcnn_parameters, otfl_mrcnn_parameters)
-                with open('output_detections.pkl', 'wb') as otfl_detections:
-                    pickle.dump(detections, otfl_detections)
-                with open('output_detection_masks.pkl', 'wb') as otfl_detection_masks:
-                    pickle.dump(detection_masks, otfl_detection_masks)
-                with open('output_detection_gt_parameters.pkl', 'wb') as otfl_detection_gt_parameters:
-                    pickle.dump(detection_gt_parameters, otfl_detection_gt_parameters)
-                with open('output_detection_gt_masks.pkl', 'wb') as otfl_detection_gt_masks:
-                    pickle.dump(detection_gt_masks, otfl_detection_gt_masks)
-                with open('output_rpn_rois.pkl', 'wb') as otfl_rpn_rois:
-                    pickle.dump(rpn_rois, otfl_rpn_rois)
-                with open('output_roi_features.pkl', 'wb') as otfl_roi_features:
-                    pickle.dump(roi_features, otfl_roi_features)
-                with open('output_roi_indices.pkl', 'wb') as otfl_roi_indices:
-                    pickle.dump(roi_indices, otfl_roi_indices)
-                with open('output_feature_map.pkl', 'wb') as otfl_feature_map:
-                    pickle.dump(feature_map, otfl_feature_map)
-                with open('output_depth_np_pred.pkl', 'wb') as otfl_depth_np_pred:
-                    pickle.dump(depth_np_pred, otfl_depth_np_pred)
-                with open('output_midas_depth.pkl', 'wb') as otfl_midas_depth:
-                    pickle.dump(midas_depth, otfl_midas_depth)
-                with open('output_feature_map.pkl', 'wb') as otfl_feature_map:
-                    pickle.dump(feature_map, otfl_feature_map)
-                with open('output_depth_np_pred.pkl', 'wb') as otfl_depth_np_pred:
-                    pickle.dump(depth_np_pred, otfl_depth_np_pred)
-
-
                 rpn_class_loss, rpn_bbox_loss, mrcnn_class_loss, mrcnn_bbox_loss, mrcnn_mask_loss, mrcnn_parameter_loss = compute_losses(config, rpn_match, rpn_bbox, rpn_class_logits, rpn_pred_bbox, target_class_ids, mrcnn_class_logits, target_deltas, mrcnn_bbox, target_mask, mrcnn_mask, target_parameters, mrcnn_parameters)
 
                 losses += [rpn_class_loss + rpn_bbox_loss + mrcnn_class_loss + mrcnn_bbox_loss + mrcnn_mask_loss + mrcnn_parameter_loss]

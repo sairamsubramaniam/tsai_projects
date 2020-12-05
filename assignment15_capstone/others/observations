@@ -1,0 +1,25 @@
+1) scannet_scene.ScanNet class's __getitem__ function takes in imageIndex as input (and in the ScanNet dataset, one scene had 1000 images!)
+
+2) For each image, there should be a corresponding segmentation.png, depth.png, pose.txt and instance-filt.png (semantics)
+
+3) Extrinsics comes from posePath
+
+4) planeDepths are calculated by using planes.npy (Nx3) tensor. planeDepths are of the shape - SegmentationImage HeightxWidthx Num planes.
+
+5) planeOffsets = are plane coordinates' (the Nx3 tensor) distances calculated using np.linalg.norm
+
+6) planeNormals = are planes divided by planeOffsets
+
+7) parameters = is the difference between planeNormals - ANCHOR_NORMALS (anchor_planes_N.npy) for the selected plane
+
+8) class_ids are closely related to planes - planes (3 coordinates) are stacked in the order of class_ids
+
+9) mask is all segmentation (plane mask ?) tensors stacked along the channel axis
+
+10) Bounding boxes are extracted from the mask
+
+11) image_meta has image_id, image shape, image window coordinates and active class_ids
+
+12) What are active_class_ids - In my case??
+
+13) `target_mask` is an array of just 1s and 0s with the shape num_instances x 28 x 28
