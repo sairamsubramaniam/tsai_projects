@@ -165,11 +165,8 @@ the input data structure to be like this:</p>
 <p>In planercnn:</p>
 <ul class="simple">
 <li><p>In scannet, <a class="reference external" href="https://github.com/NVlabs/planercnn/blob/2698414a44eaa164f5174f7fe3c87dfc4d5dea3b/datasets/scannet_scene.py#L156">here</a> what is being done?</p></li>
-<li><p>What do these contain:</p>
-<ul>
-<li><p>plane_info.npy</p></li>
-</ul>
-</li>
+<li><p>What does the file plane_info.npy contain?</p></li>
+<li><p>Plane detection is treated as instance segmentation here, therefore, instances must also have a class_id ? If yes, the dataset we created has planes that do not match with our 4 classes - hardhat, mask, boots and vest. Does that mean we should use the original scannet classes for training ?</p></li>
 </ul>
 <div class="line-block">
 <div class="line"><br /></div>

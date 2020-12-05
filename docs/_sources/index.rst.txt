@@ -136,9 +136,10 @@ In planercnn:
 
 * In scannet, `here <https://github.com/NVlabs/planercnn/blob/2698414a44eaa164f5174f7fe3c87dfc4d5dea3b/datasets/scannet_scene.py#L156>`_ what is being done?
 
-* What do these contain:
+* What does the file plane_info.npy contain?
 
-  * plane_info.npy
+* Plane detection is treated as instance segmentation here, therefore, instances must also have a class_id ? If yes, the dataset we created has planes that do not match with our 4 classes - hardhat, mask, boots and vest. Does that mean we should use the original scannet classes for training ?
+
 
 |
 |
